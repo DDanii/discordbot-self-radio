@@ -14,9 +14,8 @@ fs.readdir("/stuff/discord-bot/events/", (err, files) => {
 
 setInterval(function() {
   let j = {};
-  let players = 0;
-  ms.init('192.168.0.59', 25565, function(result){ if(ms.online){ players = ms.current_players;}else{players = 'OFFLINE'} });
-  client.user.setActivity('MC:'+players,{ type: 0 }).then(console.log)
+  let players = -1;
+  ms.init('192.168.0.59', 25565, function(result){client.user.setActivity('MC:'+ms.current_players,{ type: 0 }).then(console.log)});
   console.log(client.user);
   client.guilds.forEach((item, index) =>{
     item.members.forEach((member, key, map) =>{
