@@ -15,16 +15,25 @@ fs.readdir("/stuff/discord-bot/events/", (err, files) => {
 setInterval(function() {
   let j = {};
   let players = -1;
-  ms.init('192.168.0.59', 25565, function(result){client.user.setActivity('MC:'+ms.current_players,{ type: 0 }).then(console.log)});
-  console.log(client.user);
-  client.guilds.forEach((item, index) =>{
-    item.members.forEach((member, key, map) =>{
-      if(member.presence.status != "offline" && member.presence.status != "dnd" && !member.user.bot && member.user.avatarURL != null){
-        id =member.user.avatarURL.replace("=2048", "=16");
-        j[id] = member.presence.status;
-      }
-    })
+  ms.init('192.168.1.59', 25565, function(result){
+    if(ms.online)
+    {
+      client.user.setActivity('MC:'+ms.current_players, {type: 0}).then(console.log)
+    }
+    else
+    {
+      client.user.setActivity('MC: Offline', {type: 0}).then(console.log)
+    }
   });
+  //console.log(client.user);
+  //client.guilds.forEach((item, index) =>{
+    //item.members.forEach((member, key, map) =>{
+      //if(member.presence.status != "offline" && member.presence.status != "dnd" && !member.user.bot && member.user.avatarURL != null){
+        //id =member.user.avatarURL.replace("=2048", "=16");
+        //j[id] = member.presence.status;
+      //}
+    //})
+  //});
   console.log(j);
     fs.writeFile("/var/www/html/discord/index.php", JSON.stringify(j, null, 2) , (err) => {
       if(err) console.log(err);
