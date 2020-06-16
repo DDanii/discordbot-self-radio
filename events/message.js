@@ -40,13 +40,13 @@ module.exports = async (client, message) => {
       }
     });
   }
-  if (m.startsWith('!l')) {
+  if (m.startsWith('!play')) {
     // Only try to join the sender's voice channel if they are in one themselves
     console.log(message.member.voiceStates);
     if (message.member.voice.channel != null) {
       const connection = await message.member.voice.channel.join();
 	console.log(m.split(" ")[1]);
-      const dispatcher = connection.play(ytdl(m.split(" ")[1]+"/", {filter: 'audioonly' }));
+      const dispatcher = connection.play(ytdl(message.content.split(" ")[1]+"/", {filter: 'audioonly' }));
       dispatcher.setVolume(0.5);
       dispatcher.on('error', error =>{console.log(error)});
       dispatcher.on('finish', () => {
