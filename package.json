@@ -16,7 +16,7 @@
     "dotenv": "^8.2.0",
     "n": "^6.5.1",
     "opusscript": "0.0.7",
-    "ytdl-core": "^2.1.7"
+    "ytdl-core": "^4.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
