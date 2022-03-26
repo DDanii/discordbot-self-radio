@@ -12,13 +12,24 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
-    "discord.js": "^12.2.0",
-    "dotenv": "^8.2.0",
-    "n": "^6.5.1",
+    "@discordjs/voice": "^0.7.5",
+    "@types/heapdump": "^0.3.1",
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.6.0",
+    "ffmpeg-static": "^4.3.0",
+    "gamedig": "^2.0.28",
+    "heapdump": "^0.3.15",
+    "libsodium-wrappers": "^0.7.9",
+    "n": "^6.8.0",
+    "node-fetch": "^2.6.6",
+    "npm": "^7.13.0",
     "opusscript": "0.0.7",
-    "ytdl-core": "^4.1.1"
+    "shelljs": "^0.8.4",
+    "tweetnacl": "^1.0.3",
+    "web-request": "^1.0.7"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "@types/node-fetch": "^3.0.3",
+    "nodemon": "^2.0.7"
   }
 }

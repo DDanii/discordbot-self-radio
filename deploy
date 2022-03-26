@@ -1,0 +1,3 @@
+#!/bin/bash
+tsc index.ts --downlevelIteration --esModuleInterop && service discord-bot restart
+
