@@ -47,10 +47,11 @@ const client = new Client({
 
 client.login(process.env['DISCORDBOT_TOKEN']);
 
+client.on('ready', () )
 
 client.on('voiceStateUpdate', async (oldState, newState) =>{
 
-  if (newState.member.user.id == 'todo self id') return; //TODO
+  if (newState.member.user.id == client.user.id) return;
 
   if (oldState.channel != null) {
     if (oldState.channel.members.size == 1) {
@@ -94,7 +95,7 @@ client.on('voiceStateUpdate', async (oldState, newState) =>{
 });
 
 function isBotIn(state){
-  return state.channel.members.get('') != null //TODO self id
+  return state.channel.members.get(client.user.id) != null
 }
 
 function amIIN(state){
