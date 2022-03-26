@@ -47,8 +47,6 @@ const client = new Client({
 
 client.login(process.env['DISCORDBOT_TOKEN']);
 
-client.on('ready', () )
-
 client.on('voiceStateUpdate', async (oldState, newState) =>{
 
   if (newState.member.user.id == client.user.id) return;
