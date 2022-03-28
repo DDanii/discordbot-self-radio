@@ -1,4 +1,4 @@
-import { Client, VoiceChannel, Intents } from 'discord.js';
+import { Client, VoiceChannel, Intents, VoiceState } from 'discord.js';
 import {
 	joinVoiceChannel,
 	createAudioPlayer,
@@ -52,52 +52,41 @@ client.on('voiceStateUpdate', async (oldState, newState) =>{
   if (newState.member.user.id == client.user.id) return;
 
   if (oldState.channel != null) {
-    if (oldState.channel.members.size == 1) {
-      if (isBotIn(oldState)) {
-        onLogout(false);
-      }
-    }
+    manage(oldState.channel);
   }
+
   if (newState.channel != null) {
-    if (newState.channel.members.size == 1) {
-      if (amIIN(newState)) {
-        play(newState.channel);
-      }else{
-        if (isBotIn(newState)){
-          onLogout(false);
-        }
-      }
-    }
-    if (newState.channel.members.size >= 2) {
-
-      var login = !isBotIn(newState) && amIIN(newState);
-      var logout = false;
-      newState.channel.members.forEach(x => {
-        if(x.user.id == process.env['DISCORDBOT_OWNER_ID']) return;
-        if(!x.voice.deaf){
-          login = false;
-          if(isBotIn(newState))
-            logout = true;
-        }
-      })
-
-      if(login){
-        play(newState.channel);
-      }
-      if(logout){
-        onLogout();
-      }
-    }
+      manage(newState.channel);
   }
-
 });
 
-function isBotIn(state){
-  return state.channel.members.get(client.user.id) != null
+function manage(channel : VoiceChannel) : void{
+  var shouldBeIn = isOwnerCanHear(channel);
+
+  channel.members.forEach(m => {
+    if(m.user.id == process.env['DISCORDBOT_OWNER_ID'] || 
+        m.user.id == client.user.id) return;
+    if(!m.voice.deaf)
+      shouldBeIn = false;
+  });
+
+  if(!shouldBeIn && isBotIn(channel)){
+    onLogout(isOwnerCanHear(channel));
+  }
+
+  if(shouldBeIn && !isBotIn(channel)){
+    play(channel);
+  }
 }
 
-function amIIN(state){
-  return state.channel.members.get(process.env['DISCORDBOT_OWNER_ID']) != null
+function isBotIn(channel : VoiceChannel) : boolean{
+  return channel.members.get(client.user.id) != null
+}
+
+function isOwnerCanHear(channel : VoiceChannel) : boolean{
+  let owner = channel.members.get(process.env['DISCORDBOT_OWNER_ID']);
+
+  return owner != null && !owner.voice.deaf
 }
 
 async function play(channel){
@@ -116,3 +105,7 @@ async function onLogout(notify: boolean = true){
   if(notify)
     WebRequest.post(process.env['DISCORDBOT_JOIN_WEBHOOK']);
 }
+
+process.once('SIGTERM', function (code) {
+  onLogout(false);
+});
