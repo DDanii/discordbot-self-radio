@@ -47,6 +47,10 @@ const client = new Client({
 
 client.login(process.env['DISCORDBOT_TOKEN']);
 
+client.on('ready', async () =>{
+  manage(client.channels.cache.filter((c, k, l) => {return c.type == 'voice' && (c as VoiceChannel).members.has(process.env['DISCORDBOT_OWNER_ID'])}).first() as VoiceChannel);
+});
+
 client.on('voiceStateUpdate', async (oldState, newState) =>{
 
   if (newState.member.user.id == client.user.id) return;
@@ -61,6 +65,9 @@ client.on('voiceStateUpdate', async (oldState, newState) =>{
 });
 
 function manage(channel : VoiceChannel) : void{
+  if(!channel){
+    return;
+  }
   var shouldBeIn = isOwnerCanHear(channel);
 
   channel.members.forEach(m => {
