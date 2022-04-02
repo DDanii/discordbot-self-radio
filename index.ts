@@ -68,7 +68,7 @@ function manage(channel : VoiceChannel) : void{
   if(!channel){
     return;
   }
-  var shouldBeIn = isOwnerCanHear(channel);
+  var shouldBeIn = isOwnerIn(channel);
 
   channel.members.forEach(m => {
     if(m.user.id == process.env['DISCORDBOT_OWNER_ID'] || 
@@ -78,7 +78,7 @@ function manage(channel : VoiceChannel) : void{
   });
 
   if(!shouldBeIn && isBotIn(channel)){
-    onLogout(isOwnerCanHear(channel));
+    onLogout(isOwnerIn(channel));
   }
 
   if(shouldBeIn && !isBotIn(channel)){
@@ -90,10 +90,10 @@ function isBotIn(channel : VoiceChannel) : boolean{
   return channel.members.get(client.user.id) != null
 }
 
-function isOwnerCanHear(channel : VoiceChannel) : boolean{
+function isOwnerIn(channel : VoiceChannel) : boolean{
   let owner = channel.members.get(process.env['DISCORDBOT_OWNER_ID']);
 
-  return owner != null && !owner.voice.deaf
+  return owner != null
 }
 
 async function play(channel){
