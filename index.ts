@@ -20,6 +20,7 @@ async function playSong() {
   try {
 		entersState(connection, VoiceConnectionStatus.Ready, 30e3);
 	} catch (error) {
+    console.log(error);
 		connection.destroy();
 	}
 	const resource = createAudioResource(process.env['DISCORDBOT_STREAM_LINK'], {
@@ -48,6 +49,7 @@ const client = new Client({
 client.login(process.env['DISCORDBOT_TOKEN']);
 
 client.on('ready', async () =>{
+  console.log("Bot ready");
   manage(client.channels.cache.filter((c, k, l) => {return c.type == 'voice' && (c as VoiceChannel).members.has(process.env['DISCORDBOT_OWNER_ID'])}).first() as VoiceChannel);
 });
 
