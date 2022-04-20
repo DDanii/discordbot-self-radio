@@ -7,13 +7,14 @@ import {
 	StreamType,
 	AudioPlayerStatus,
 	VoiceConnectionStatus,
+  VoiceConnection,
 } from '@discordjs/voice';
 import { createDiscordJSAdapter } from './adapter';
 import * as WebRequest from 'web-request';
 
 const player = createAudioPlayer();
 
-let connection;
+let connection: VoiceConnection;
 
 async function playSong() {
 
@@ -28,6 +29,10 @@ async function playSong() {
 	});
   
 	player.play(resource);
+
+  player.on(AudioPlayerStatus.Idle, (oldOne, newOne) => {
+        console.log("old:" + oldOne + "new:" + newOne);
+});
 
 	return entersState(player, AudioPlayerStatus.Playing, 15e3);
 }
@@ -105,12 +110,15 @@ async function play(channel){
         await playSong();
         connection.subscribe(player);
     } catch (error) {
-        console.error(error);
+        console.log(error);
     }
 }
 
 async function onLogout(notify: boolean = true){
-  connection.destroy();
+  if ( connection.state.status != VoiceConnectionStatus.Destroyed ){
+    connection.destroy();
+  }
+
   if(notify)
     WebRequest.post(process.env['DISCORDBOT_JOIN_WEBHOOK']);
 }
