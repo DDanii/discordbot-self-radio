@@ -8,6 +8,7 @@ import {
 	AudioPlayerStatus,
 	VoiceConnectionStatus,
   VoiceConnection,
+  AudioPlayer,
 } from '@discordjs/voice';
 import { createDiscordJSAdapter } from './adapter';
 import * as WebRequest from 'web-request';
@@ -16,7 +17,7 @@ const player = createAudioPlayer();
 
 let connection: VoiceConnection;
 
-async function playSong() {
+async function playSong() : Promise<AudioPlayer> {
 
   try {
 		entersState(connection, VoiceConnectionStatus.Ready, 30e3);
@@ -24,15 +25,22 @@ async function playSong() {
     console.log(error);
 		connection.destroy();
 	}
-	const resource = createAudioResource(process.env['DISCORDBOT_STREAM_LINK'], {
+	
+  return createResourceAndPlay();
+}
+
+function createResourceAndPlay() : Promise<AudioPlayer> {
+
+  const resource = createAudioResource(process.env['DISCORDBOT_STREAM_LINK'], {
     inputType: StreamType.Raw,
 	});
   
 	player.play(resource);
 
   player.on(AudioPlayerStatus.Idle, (oldOne, newOne) => {
-        console.log("old:" + oldOne + "new:" + newOne);
-});
+    console.log("old:" + oldOne.toString() + "new:" + newOne.toString());
+    createResourceAndPlay();
+  });
 
 	return entersState(player, AudioPlayerStatus.Playing, 15e3);
 }
