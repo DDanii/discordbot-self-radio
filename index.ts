@@ -37,11 +37,6 @@ function createResourceAndPlay() : Promise<AudioPlayer> {
   
 	player.play(resource);
 
-  player.on(AudioPlayerStatus.Idle, (oldOne, newOne) => {
-    console.log("old:" + oldOne.toString() + "new:" + newOne.toString());
-    createResourceAndPlay();
-  });
-
 	return entersState(player, AudioPlayerStatus.Playing, 15e3);
 }
 
