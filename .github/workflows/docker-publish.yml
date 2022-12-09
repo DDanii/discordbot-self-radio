@@ -41,8 +41,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: yarn 
-        run: yarn install typescript
+      - name: npm 
+        run: npm install typescript
       - name: tsc
         run: tsc index.ts --downlevelIteration --esModuleInterop
 
