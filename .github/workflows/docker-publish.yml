@@ -19,21 +19,14 @@ env:
 
 jobs:
 
-  tsc:
+  build:
     name: tsc
     runs-on: ubuntu-latest
-    - name: install node v16
-      uses: actions/setup-node@v1
-      with:
-        node-version: 16
-    - name: yarn 
-      run: yarn install typescript
-    - name: tsc
-      run: tsc index.ts --downlevelIteration --esModuleInterop
+    
 
-  build:
+  #build:
 
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -44,15 +37,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      # Install the cosign tool except on PR
-      # https://github.com/sigstore/cosign-installer
-      - name: Install cosign
-        if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@f3c664df7af409cb4873aa5068053ba9d61a57b6 #v2.6.0
+      - name: install node v16
+        uses: actions/setup-node@v1
         with:
-          cosign-release: 'v1.11.0'
+          node-version: 16
+      - name: yarn 
+        run: yarn install typescript
+      - name: tsc
+        run: tsc index.ts --downlevelIteration --esModuleInterop
 
+      
 
       # Workaround: https://github.com/docker/build-push-action/issues/461
       - name: Setup Docker buildx
