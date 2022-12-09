@@ -8,6 +8,9 @@ name: Docker
 on:
   release:
     types: [published]
+  push:
+    branches: [ "master" ]
+  
 
 env:
   # github.repository as <account>/<repo>
@@ -15,6 +18,19 @@ env:
 
 
 jobs:
+
+  tsc:
+    name: tsc
+    runs-on: ubuntu-latest
+    - name: install node v16
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16
+    - name: yarn 
+      run: yarn install typescript
+    - name: tsc
+      run: tsc index.ts --downlevelIteration --esModuleInterop
+
   build:
 
     runs-on: ubuntu-latest
