@@ -1,4 +1,4 @@
-FROM oznu/s6-node:16.15.0-amd64
+FROM oznu/s6-node:16.15.0-ubuntu-amd64
 
 # Create app directory
 WORKDIR /usr/src/app
