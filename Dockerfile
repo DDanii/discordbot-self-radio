@@ -1,4 +1,4 @@
-FROM node:16
+FROM oznu/s6-node:amd64
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -15,4 +15,4 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-CMD [ "node", "index.js" ]
+#CMD [ "node", "index.js" ]
