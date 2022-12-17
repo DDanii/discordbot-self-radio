@@ -15,4 +15,6 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+COPY rootfs .
+
 #CMD [ "node", "index.js" ]
