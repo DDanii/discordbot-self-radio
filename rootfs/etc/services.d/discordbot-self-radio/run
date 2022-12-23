@@ -1,2 +1,2 @@
 #!/bin/sh
-node /usr/src/app/index.js
+python /usr/src/app/bot.py
