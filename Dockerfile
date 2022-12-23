@@ -6,6 +6,6 @@ WORKDIR /usr/src/app
 # Bundle app source
 COPY bot.py .
 
-RUN pip install -r requirements.txt 
+RUN pip install -r /usr/src/app/requirements.txt 
 
 COPY rootfs /
