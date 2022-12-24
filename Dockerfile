@@ -9,7 +9,7 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt 
 
-RUN apk add ffmpeg
+RUN apk add libffi-dev libnacl-dev python3-dev
 
 COPY rootfs /
 

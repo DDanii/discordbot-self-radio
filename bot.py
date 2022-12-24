@@ -54,7 +54,7 @@ async def manage(channel: discord.VoiceChannel):
             should_be_in = False
 
     if not should_be_in and is_bot_in(channel):
-        on_logout(is_owner_in(channel))
+        await on_logout(is_owner_in(channel))
 
     if should_be_in and not is_bot_in(channel):
         await play(channel)
@@ -79,8 +79,8 @@ async def on_voice_state_update(member, before, after):
     await manage(before.channel)
     await manage(after.channel)
 
-def sigterm_handler(_signo, _stack_frame):
-    player.stop()
+async def sigterm_handler(_signo, _stack_frame):
+    await on_logout(False)
 
 signal.signal(signal.SIGTERM, sigterm_handler)
 
