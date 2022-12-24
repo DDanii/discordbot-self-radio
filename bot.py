@@ -71,6 +71,14 @@ async def on_ready():
             await manage(channel)
             return
 
+@client.event
+async def on_voice_state_update(member, before, after):
+    if member.id == client.user.id:
+        return
+
+    await manage(before.channel)
+    await manage(after.channel)
+
 def sigterm_handler(_signo, _stack_frame):
     player.stop()
 
