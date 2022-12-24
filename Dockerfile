@@ -9,7 +9,7 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt 
 
-RUN apk add libffi-dev libsodium-dev python3-dev ffmpeg
+RUN apk add libffi-dev libsodium-dev python3-dev ffmpeg opus
 
 COPY rootfs /
 
