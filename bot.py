@@ -14,7 +14,7 @@ logger = logging.getLogger('mylogger')
 
 logger.setLevel(logging.DEBUG) # set logger level
 logFormatter = logging.Formatter\
-("%(name)-12s %(asctime)s %(levelname)-8s %(filename)s:%(funcName)s %(message)s")
+("%(name)-12s %(levelname)-8s %(message)s")
 consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
 consoleHandler.setFormatter(logFormatter)
 logger.addHandler(consoleHandler)
@@ -39,14 +39,14 @@ async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
     logger.debug("ctypes - Find opus:")
     a = ctypes.util.find_library('opus')
     logger.debug(a)
- 
-    logger.debug("Discord - Load Opus:")
-    b = discord.opus.load_opus(a)
-    logger.debug(b)
-    
-    logger.debug("Discord - Is loaded:")
-    c = discord.opus.is_loaded()
-    logger.debug(c)
+    if a is not None:
+        logger.debug("Discord - Load Opus:")
+        b = discord.opus.load_opus(a)
+        logger.debug(b)
+        
+        logger.debug("Discord - Is loaded:")
+        c = discord.opus.is_loaded()
+        logger.debug(c)
 
     player = await channel.connect()
     player.play(FFmpegPCMAudio(url))
