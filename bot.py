@@ -1,8 +1,8 @@
 import os
 import signal
+import ctypes
 import requests
 import discord
-import ctypes
 import ctypes.util
 
 from discord import FFmpegPCMAudio
@@ -34,7 +34,7 @@ async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
     print("Discord - Is loaded:")
     c = discord.opus.is_loaded()
     print(c)
-    
+
     player = await channel.connect()
     player.play(FFmpegPCMAudio(url))
 
