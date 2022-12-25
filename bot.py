@@ -22,6 +22,7 @@ client = discord.Client(intents=intents)
 async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
     global player
     try:
+        discord.opus.load_opus("opus")
         player = await channel.connect()
     except:
         pass
@@ -80,6 +81,7 @@ async def on_voice_state_update(member, before, after):
     await manage(after.channel)
 
 async def sigterm_handler(_signo, _stack_frame):
+    print("Bot shutting down")
     await on_logout(False)
 
 signal.signal(signal.SIGTERM, sigterm_handler)

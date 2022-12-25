@@ -1,3 +1,9 @@
-#!/usr/bin/execlineb -S0
+#!/bin/sh
 
-s6-svscanctl -t /var/run/s6/legacy-services/discordbot-self-radio
+if test "$1" -eq 256 ; then
+  e=$((128 + $2))
+else
+  e="$1"
+fi
+
+echo "$e" > /run/s6-linux-init-container-results/exitcode
