@@ -1,11 +1,24 @@
 import os
 import signal
 import ctypes
+import ctypes.util
+import logging
+from sys import stdout
 import requests
 import discord
-import ctypes.util
-
 from discord import FFmpegPCMAudio
+
+
+# Define logger
+logger = logging.getLogger('mylogger')
+
+logger.setLevel(logging.DEBUG) # set logger level
+logFormatter = logging.Formatter\
+("%(name)-12s %(asctime)s %(levelname)-8s %(filename)s:%(funcName)s %(message)s")
+consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
+consoleHandler.setFormatter(logFormatter)
+logger.addHandler(consoleHandler)
+
 
 DISCORDBOT_TOKEN = os.getenv('DISCORDBOT_TOKEN')
 DISCORDBOT_STREAM_LINK = os.getenv('DISCORDBOT_STREAM_LINK')
@@ -23,17 +36,17 @@ client = discord.Client(intents=intents)
 async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
     global player
 
-    print("ctypes - Find opus:")
+    logger.debug("ctypes - Find opus:")
     a = ctypes.util.find_library('opus')
-    print(a)
+    logger.debug(a)
  
-    print("Discord - Load Opus:")
+    logger.debug("Discord - Load Opus:")
     b = discord.opus.load_opus(a)
-    print(b)
+    logger.debug(b)
     
-    print("Discord - Is loaded:")
+    logger.debug("Discord - Is loaded:")
     c = discord.opus.is_loaded()
-    print(c)
+    logger.debug(c)
 
     player = await channel.connect()
     player.play(FFmpegPCMAudio(url))
@@ -46,6 +59,7 @@ def is_bot_in(channel: discord.VoiceChannel):
 
 async def on_logout(notify = True):
   #if  connection.state.status != VoiceConnectionStatus.Destroyed :
+    logger.debug("player stop")
     player.stop()
 
     if notify:
@@ -76,7 +90,7 @@ async def manage(channel: discord.VoiceChannel):
 
 @client.event
 async def on_ready():
-    print('Bot Ready')
+    logger.info('Bot Ready')
     for channel in client.get_all_channels():
         if isinstance(channel, discord.VoiceChannel) and is_owner_in(channel):
             await manage(channel)
@@ -91,7 +105,7 @@ async def on_voice_state_update(member, before, after):
     await manage(after.channel)
 
 async def sigterm_handler(_signo, _stack_frame):
-    print("Bot shutting down")
+    logger.info("Bot shutting down")
     await on_logout(False)
 
 signal.signal(signal.SIGTERM, sigterm_handler)
