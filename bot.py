@@ -1,8 +1,9 @@
 import os
 import signal
-import asyncio
 import requests
 import discord
+import ctypes
+import ctypes.util
 
 from discord import FFmpegPCMAudio
 
@@ -21,7 +22,19 @@ client = discord.Client(intents=intents)
 #   channel = ctx.message.author.voice.channel
 async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
     global player
-    discord.opus.load_opus("opus")
+
+    print("ctypes - Find opus:")
+    a = ctypes.util.find_library('opus')
+    print(a)
+ 
+    print("Discord - Load Opus:")
+    b = discord.opus.load_opus(a)
+    print(b)
+    
+    print("Discord - Is loaded:")
+    c = discord.opus.is_loaded()
+    print(c)
+    
     player = await channel.connect()
     player.play(FFmpegPCMAudio(url))
 
