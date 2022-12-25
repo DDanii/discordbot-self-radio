@@ -10,11 +10,11 @@ from discord import FFmpegPCMAudio
 
 
 # Define logger
-logger = logging.getLogger('mylogger')
+logger = logging.getLogger('bot')
 
 logger.setLevel(logging.DEBUG) # set logger level
 logFormatter = logging.Formatter\
-("%(name)-12s %(levelname)-8s %(message)s")
+("%(asctime)s %(levelname)-8s %(name)-12s  %(message)s")
 consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
 consoleHandler.setFormatter(logFormatter)
 logger.addHandler(consoleHandler)
@@ -36,17 +36,17 @@ client = discord.Client(intents=intents)
 async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
     global player
 
-    logger.debug("ctypes - Find opus:")
-    a = ctypes.util.find_library('opus')
-    logger.debug(a)
-    if a is not None:
-        logger.debug("Discord - Load Opus:")
-        b = discord.opus.load_opus(a)
-        logger.debug(b)
+    # logger.debug("ctypes - Find opus:")
+    # a = ctypes.util.find_library('opus')
+    # logger.debug(a)
+    # if a is not None:
+    #     logger.debug("Discord - Load Opus:")
+    #     b = discord.opus.load_opus(a)
+    #     logger.debug(b)
         
-        logger.debug("Discord - Is loaded:")
-        c = discord.opus.is_loaded()
-        logger.debug(c)
+    #     logger.debug("Discord - Is loaded:")
+    #     c = discord.opus.is_loaded()
+    #     logger.debug(c)
 
     player = await channel.connect()
     player.play(FFmpegPCMAudio(url))
@@ -60,7 +60,7 @@ def is_bot_in(channel: discord.VoiceChannel):
 async def on_logout(notify = True):
   #if  connection.state.status != VoiceConnectionStatus.Destroyed :
     logger.debug("player stop")
-    player.stop()
+    player.disconnect()
 
     if notify:
         requests.post(DISCORDBOT_JOIN_WEBHOOK, timeout=30)
