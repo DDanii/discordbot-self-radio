@@ -21,11 +21,8 @@ client = discord.Client(intents=intents)
 #   channel = ctx.message.author.voice.channel
 async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
     global player
-    try:
-        discord.opus.load_opus("opus")
-        player = await channel.connect()
-    except:
-        pass
+    discord.opus.load_opus("opus")
+    player = await channel.connect()
     player.play(FFmpegPCMAudio(url))
 
 def is_owner_in(channel: discord.VoiceChannel):
