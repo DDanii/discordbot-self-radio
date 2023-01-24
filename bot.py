@@ -97,10 +97,10 @@ signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
 for s in signals:
     loop.add_signal_handler(
         s, lambda s=s: asyncio.create_task(shutdown(s, loop)))
-queue = asyncio.Queue()
 
 async def shutdown(signal, loop):
     logger.info("Received exit signal %s..." % signal.name)
     await on_logout(False)
     loop.stop()
-client.run(DISCORDBOT_TOKEN)
+
+loop.run_until_complete(client.run(DISCORDBOT_TOKEN))
