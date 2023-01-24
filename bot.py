@@ -13,7 +13,7 @@ logger = logging.getLogger('bot')
 
 logger.setLevel(logging.DEBUG) # set logger level
 logFormatter = logging.Formatter\
-("%(asctime)s %(levelname)-8s %(name)-12s  %(message)s")
+("%(asctime)s [%(levelname)-8s] %(name)-12s: %(message)s")
 consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
 consoleHandler.setFormatter(logFormatter)
 logger.addHandler(consoleHandler)
@@ -91,7 +91,6 @@ async def on_voice_state_update(member, before, after):
     await manage(before.channel)
     await manage(after.channel)
 
-client.run(DISCORDBOT_TOKEN)
 
 loop = asyncio.get_event_loop()
 signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
@@ -104,3 +103,4 @@ async def shutdown(signal, loop):
     logger.info("Received exit signal %s..." % signal.name)
     await on_logout(False)
     loop.stop()
+client.run(DISCORDBOT_TOKEN)
