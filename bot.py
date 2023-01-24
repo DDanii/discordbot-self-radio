@@ -1,11 +1,10 @@
 import os
 import signal
-import ctypes
-import ctypes.util
 import logging
 from sys import stdout
 import requests
 import discord
+import asyncio
 from discord import FFmpegPCMAudio
 
 
@@ -36,18 +35,6 @@ client = discord.Client(intents=intents)
 async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
     global player
 
-    # logger.debug("ctypes - Find opus:")
-    # a = ctypes.util.find_library('opus')
-    # logger.debug(a)
-    # if a is not None:
-    #     logger.debug("Discord - Load Opus:")
-    #     b = discord.opus.load_opus(a)
-    #     logger.debug(b)
-        
-    #     logger.debug("Discord - Is loaded:")
-    #     c = discord.opus.is_loaded()
-    #     logger.debug(c)
-
     player = await channel.connect()
     player.play(FFmpegPCMAudio(url))
 
@@ -60,7 +47,7 @@ def is_bot_in(channel: discord.VoiceChannel):
 async def on_logout(notify = True):
   #if  connection.state.status != VoiceConnectionStatus.Destroyed :
     logger.debug("player stop")
-    player.disconnect()
+    await player.disconnect()
 
     if notify:
         requests.post(DISCORDBOT_JOIN_WEBHOOK, timeout=30)
@@ -111,3 +98,15 @@ async def sigterm_handler(_signo, _stack_frame):
 signal.signal(signal.SIGTERM, sigterm_handler)
 
 client.run(DISCORDBOT_TOKEN)
+
+loop = asyncio.get_event_loop()
+signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
+for s in signals:
+    loop.add_signal_handler(
+        s, lambda s=s: asyncio.create_task(shutdown(s, loop)))
+queue = asyncio.Queue()
+
+async def shutdown(signal, loop):
+    logging.info("Received exit signal {%s}..." % signal.name)
+    await on_logout(False)
+    loop.stop()
