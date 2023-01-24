@@ -20,6 +20,7 @@ logger.addHandler(consoleHandler)
 
 
 DISCORDBOT_TOKEN = os.getenv('DISCORDBOT_TOKEN')
+logger.debug("bot token: {%s}" % DISCORDBOT_TOKEN)
 DISCORDBOT_STREAM_LINK = os.getenv('DISCORDBOT_STREAM_LINK')
 DISCORDBOT_OWNER_ID = os.getenv('DISCORDBOT_OWNER_ID')
 DISCORDBOT_JOIN_WEBHOOK = os.getenv('DISCORDBOT_JOIN_WEBHOOK')
@@ -91,12 +92,9 @@ async def on_voice_state_update(member, before, after):
     await manage(before.channel)
     await manage(after.channel)
 
-async def sigterm_handler(_signo, _stack_frame):
-    logger.info("Bot shutting down")
-    await on_logout(False)
 
-signal.signal(signal.SIGTERM, sigterm_handler)
 
+logger.debug("bot token: {%s}" % DISCORDBOT_TOKEN)
 client.run(DISCORDBOT_TOKEN)
 
 loop = asyncio.get_event_loop()
@@ -107,6 +105,6 @@ for s in signals:
 queue = asyncio.Queue()
 
 async def shutdown(signal, loop):
-    logging.info("Received exit signal {%s}..." % signal.name)
+    logger.info("Received exit signal {%s}..." % signal.name)
     await on_logout(False)
     loop.stop()

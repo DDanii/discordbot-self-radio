@@ -2,9 +2,6 @@ discordbot-self-radio
 
 A discord bot to play a radio stream if you are alone / no one else can hear the bot.
 
-build:
-tsc index.ts --downlevelIteration --esModuleInterop
-
 environment variables:
 
 DISCORDBOT_STREAM_LINK : Radio stream link example: https://25293.live.streamtheworld.com/Q_DANCE.mp3
