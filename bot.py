@@ -101,4 +101,4 @@ for s in signals:
     loop.add_signal_handler(
         s, lambda s=s: asyncio.create_task(shutdown(s, loop)))
 
-asyncio.run(client.run(DISCORDBOT_TOKEN))
+loop.run_until_complete(client.run(DISCORDBOT_TOKEN))
