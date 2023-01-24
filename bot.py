@@ -7,7 +7,6 @@ import discord
 import asyncio
 from discord import FFmpegPCMAudio
 
-
 # Define logger
 logger = logging.getLogger('bot')
 
@@ -17,7 +16,6 @@ logFormatter = logging.Formatter\
 consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
 consoleHandler.setFormatter(logFormatter)
 logger.addHandler(consoleHandler)
-
 
 DISCORDBOT_TOKEN = os.getenv('DISCORDBOT_TOKEN')
 DISCORDBOT_STREAM_LINK = os.getenv('DISCORDBOT_STREAM_LINK')
@@ -91,16 +89,16 @@ async def on_voice_state_update(member, before, after):
     await manage(before.channel)
     await manage(after.channel)
 
-
-loop = asyncio.get_event_loop()
-signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
-for s in signals:
-    loop.add_signal_handler(
-        s, lambda s=s: asyncio.create_task(shutdown(s, loop)))
-
 async def shutdown(signal, loop):
     logger.info("Received exit signal %s..." % signal.name)
     await on_logout(False)
     loop.stop()
 
-loop.run_until_complete(client.run(DISCORDBOT_TOKEN))
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
+for s in signals:
+    loop.add_signal_handler(
+        s, lambda s=s: asyncio.create_task(shutdown(s, loop)))
+
+asyncio.run(client.run(DISCORDBOT_TOKEN))
