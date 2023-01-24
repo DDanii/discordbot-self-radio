@@ -20,10 +20,12 @@ logger.addHandler(consoleHandler)
 
 
 DISCORDBOT_TOKEN = os.getenv('DISCORDBOT_TOKEN')
-logger.debug("bot token: {%s}" % os.getenv('DISCORDBOT_TOKEN'))
 DISCORDBOT_STREAM_LINK = os.getenv('DISCORDBOT_STREAM_LINK')
 DISCORDBOT_OWNER_ID = os.getenv('DISCORDBOT_OWNER_ID')
 DISCORDBOT_JOIN_WEBHOOK = os.getenv('DISCORDBOT_JOIN_WEBHOOK')
+logger.debug("bot token: {%s}" % os.getenv('DISCORDBOT_TOKEN'))
+logger.debug("DISCORDBOT_STREAM_LINK: {%s}" % os.getenv('DISCORDBOT_STREAM_LINK'))
+logger.debug("DISCORDBOT_OWNER_ID: {%s}" % os.getenv('DISCORDBOT_OWNER_ID'))
 
 intents = discord.Intents.default()
 
