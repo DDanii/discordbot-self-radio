@@ -23,9 +23,6 @@ DISCORDBOT_TOKEN = os.getenv('DISCORDBOT_TOKEN')
 DISCORDBOT_STREAM_LINK = os.getenv('DISCORDBOT_STREAM_LINK')
 DISCORDBOT_OWNER_ID = os.getenv('DISCORDBOT_OWNER_ID')
 DISCORDBOT_JOIN_WEBHOOK = os.getenv('DISCORDBOT_JOIN_WEBHOOK')
-logger.debug("bot token: {%s}" % os.getenv('DISCORDBOT_TOKEN'))
-logger.debug("DISCORDBOT_STREAM_LINK: {%s}" % os.getenv('DISCORDBOT_STREAM_LINK'))
-logger.debug("DISCORDBOT_OWNER_ID: {%s}" % os.getenv('DISCORDBOT_OWNER_ID'))
 
 intents = discord.Intents.default()
 
@@ -94,9 +91,6 @@ async def on_voice_state_update(member, before, after):
     await manage(before.channel)
     await manage(after.channel)
 
-
-
-logger.debug("bot token: {%s}" % DISCORDBOT_TOKEN)
 client.run(DISCORDBOT_TOKEN)
 
 loop = asyncio.get_event_loop()
@@ -107,6 +101,6 @@ for s in signals:
 queue = asyncio.Queue()
 
 async def shutdown(signal, loop):
-    logger.info("Received exit signal {%s}..." % signal.name)
+    logger.info("Received exit signal %s..." % signal.name)
     await on_logout(False)
     loop.stop()

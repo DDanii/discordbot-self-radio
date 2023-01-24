@@ -3,6 +3,8 @@ FROM ivonet/alpine-python-s6
 # Create app directory
 WORKDIR /usr/src/app
 
+ENV S6_KEEP_ENV=1
+
 # Bundle app source
 COPY bot.py .
 COPY requirements.txt .
