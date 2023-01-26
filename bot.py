@@ -43,11 +43,10 @@ def is_bot_in(channel: discord.VoiceChannel):
     return any(m.id == client.user.id for m in channel.members)
 
 async def on_logout(notify = True):
-  #if  connection.state.status != VoiceConnectionStatus.Destroyed :
     logger.debug("player stop")
     await player.disconnect()
 
-    if notify:
+    if notify and DISCORDBOT_JOIN_WEBHOOK:
         requests.post(DISCORDBOT_JOIN_WEBHOOK, timeout=30)
 
 async def manage(channel: discord.VoiceChannel):
@@ -101,4 +100,5 @@ for s in signals:
     loop.add_signal_handler(
         s, lambda s=s: asyncio.create_task(shutdown(s, loop)))
 
-loop.run_until_complete(client.run(DISCORDBOT_TOKEN))
+client.run(DISCORDBOT_TOKEN)
+loop.run_forever()
