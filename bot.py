@@ -1,3 +1,4 @@
+import sys
 import os
 import signal
 import logging
@@ -5,6 +6,8 @@ from sys import stdout
 import requests
 import discord
 import asyncio
+import functools
+import threading
 from discord import FFmpegPCMAudio
 
 # Define logger
@@ -16,7 +19,7 @@ logFormatter = logging.Formatter\
 consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
 consoleHandler.setFormatter(logFormatter)
 logger.addHandler(consoleHandler)
-
+player = None
 DISCORDBOT_TOKEN = os.getenv('DISCORDBOT_TOKEN')
 DISCORDBOT_STREAM_LINK = os.getenv('DISCORDBOT_STREAM_LINK')
 DISCORDBOT_OWNER_ID = os.getenv('DISCORDBOT_OWNER_ID')
@@ -31,7 +34,7 @@ client = discord.Client(intents=intents)
 #async def play(ctx, url: str = DISCORDBOT_STREAM_LINK):
 #   channel = ctx.message.author.voice.channel
 async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
-    global player
+    #global player
 
     player = await channel.connect()
     player.play(FFmpegPCMAudio(url))
@@ -44,7 +47,8 @@ def is_bot_in(channel: discord.VoiceChannel):
 
 async def on_logout(notify = True):
     logger.debug("player stop")
-    await player.disconnect()
+    if player:
+        await player.disconnect()
 
     if notify and DISCORDBOT_JOIN_WEBHOOK:
         requests.post(DISCORDBOT_JOIN_WEBHOOK, timeout=30)
@@ -88,17 +92,21 @@ async def on_voice_state_update(member, before, after):
     await manage(before.channel)
     await manage(after.channel)
 
-async def shutdown(signal, loop):
-    logger.info("Received exit signal %s..." % signal.name)
-    await on_logout(False)
-    loop.stop()
+def async_runner():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
+    loop.run_until_complete(on_logout(False))
+    loop.close()
+
+def shutdown(sig, frame):
+    logger.info("Received exit signal ...")
+    thread = threading.Thread(target=async_runner)
+    thread.start()
+    sys.exit(0)
+
 signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
 for s in signals:
-    loop.add_signal_handler(
-        s, lambda s=s: asyncio.create_task(shutdown(s, loop)))
+    signal.signal(s, shutdown)
 
 client.run(DISCORDBOT_TOKEN)
-loop.run_forever()
