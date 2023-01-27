@@ -19,7 +19,7 @@ logFormatter = logging.Formatter\
 consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
 consoleHandler.setFormatter(logFormatter)
 logger.addHandler(consoleHandler)
-player = None
+
 DISCORDBOT_TOKEN = os.getenv('DISCORDBOT_TOKEN')
 DISCORDBOT_STREAM_LINK = os.getenv('DISCORDBOT_STREAM_LINK')
 DISCORDBOT_OWNER_ID = os.getenv('DISCORDBOT_OWNER_ID')
@@ -34,7 +34,7 @@ client = discord.Client(intents=intents)
 #async def play(ctx, url: str = DISCORDBOT_STREAM_LINK):
 #   channel = ctx.message.author.voice.channel
 async def play(channel, url: str = DISCORDBOT_STREAM_LINK):
-    #global player
+    global player
 
     player = await channel.connect()
     player.play(FFmpegPCMAudio(url))
@@ -46,9 +46,9 @@ def is_bot_in(channel: discord.VoiceChannel):
     return any(m.id == client.user.id for m in channel.members)
 
 async def on_logout(notify = True):
-    logger.info("player stop")
-    logger.debug(player)
-    if player:
+    logger.debug("on_logout")
+    if 'player' in locals():
+        logger.info("player stop")
         await player.disconnect()
 
     if notify and DISCORDBOT_JOIN_WEBHOOK:
