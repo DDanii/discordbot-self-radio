@@ -46,7 +46,8 @@ def is_bot_in(channel: discord.VoiceChannel):
     return any(m.id == client.user.id for m in channel.members)
 
 async def on_logout(notify = True):
-    logger.debug("player stop")
+    logger.info("player stop")
+    logger.debug(player)
     if player:
         await player.disconnect()
 
