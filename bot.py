@@ -6,7 +6,6 @@ from sys import stdout
 import requests
 import discord
 import asyncio
-import functools
 import threading
 from discord import FFmpegPCMAudio
 
@@ -47,7 +46,6 @@ def is_bot_in(channel: discord.VoiceChannel):
 
 async def on_logout(notify = True):
     logger.debug("on_logout")
-    logger.debug(globals())
     if 'player' in globals():
         logger.info("player stop")
         await player.disconnect()
