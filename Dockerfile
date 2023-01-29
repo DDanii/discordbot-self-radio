@@ -1,20 +1,18 @@
-FROM oznu/s6-node:16.15.0-ubuntu-amd64
+FROM ivonet/alpine-python-s6
 
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-
-RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
+ENV S6_KEEP_ENV=1
 
 # Bundle app source
-COPY . .
+COPY bot.py .
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt 
+
+RUN apk add libffi-dev libsodium-dev python3-dev ffmpeg opus-dev build-base
 
 COPY rootfs /
 
-#CMD [ "node", "index.js" ]
+RUN if [ -d /etc/services.d ]; then chmod -R 755 /etc/services.d; fi
