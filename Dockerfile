@@ -10,6 +10,7 @@ COPY bot.py .
 COPY requirements.txt .
 
 RUN apk add libffi-dev libsodium-dev python3-dev ffmpeg opus-dev build-base py3-pip
+RUN ln -sf python3 /usr/bin/python
 
 RUN pip install --no-cache-dir -r requirements.txt 
 
