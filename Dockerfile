@@ -9,9 +9,9 @@ ENV S6_KEEP_ENV=1
 COPY bot.py .
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt 
+RUN apk add libffi-dev libsodium-dev python3-dev ffmpeg opus-dev build-base py3-pip
 
-RUN apk add libffi-dev libsodium-dev python3-dev ffmpeg opus-dev build-base
+RUN pip install --no-cache-dir -r requirements.txt 
 
 COPY rootfs /
 
