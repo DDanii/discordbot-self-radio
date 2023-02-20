@@ -1,4 +1,4 @@
-FROM ivonet/alpine-python-s6
+FROM crazymax/alpine-s6
 
 # Create app directory
 WORKDIR /usr/src/app
