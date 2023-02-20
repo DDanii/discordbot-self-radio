@@ -9,7 +9,7 @@ on:
   release:
     types: [published]
   push:
-    branches: [ "master", "python" ]
+    branches: [ "master", "dev" ]
   
 
 env:
