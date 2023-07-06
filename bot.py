@@ -8,11 +8,19 @@ import discord
 import asyncio
 import threading
 from discord import FFmpegPCMAudio
+from dotenv import load_dotenv
 
-# Define logger
+load_dotenv()
+
 logger = logging.getLogger('bot')
 
-logger.setLevel(logging.DEBUG) # set logger level
+log_level = os.getenv('LOG_LEVEL')
+if isinstance(log_level, str):
+    log_level = log_level.upper()
+LOG_LEVEL = logging.getLevelName(log_level)
+if not isinstance(LOG_LEVEL, int):
+    LOG_LEVEL = logging.INFO
+logger.setLevel(LOG_LEVEL)
 logFormatter = logging.Formatter\
 ("%(asctime)s [%(levelname)-8s] %(name)-12s: %(message)s")
 consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
@@ -20,6 +28,9 @@ consoleHandler.setFormatter(logFormatter)
 logger.addHandler(consoleHandler)
 
 DISCORDBOT_TOKEN = os.getenv('DISCORDBOT_TOKEN')
+if not isinstance(DISCORDBOT_TOKEN, str):
+    logger.fatal("Invalid bot token")
+    exit()
 DISCORDBOT_STREAM_LINK = os.getenv('DISCORDBOT_STREAM_LINK')
 DISCORDBOT_OWNER_ID = os.getenv('DISCORDBOT_OWNER_ID')
 DISCORDBOT_JOIN_WEBHOOK = os.getenv('DISCORDBOT_JOIN_WEBHOOK')
@@ -56,14 +67,22 @@ async def on_logout(notify = True):
 async def manage(channel: discord.VoiceChannel):
     if not channel:
         return
+    
+    logger.debug("in manage channel: %s", channel)
 
     should_be_in = is_owner_in(channel)
+    logger.debug("should_be_in: %s", should_be_in)
 
     for member in channel.members:
+        logger.debug("members loop member: %s", member)
+        
         if member.id == int(DISCORDBOT_OWNER_ID) or member.id == client.user.id:
             continue
 
-        if not member.voice.deaf:
+        logger.debug("member.voice.deaf: %s", member.voice.deaf)
+        logger.debug("member.voice.self_deaf: %s", member.voice.self_deaf)
+
+        if not (member.voice.deaf or member.voice.self_deaf):
             should_be_in = False
 
     if not should_be_in and is_bot_in(channel):
@@ -109,4 +128,4 @@ signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
 for s in signals:
     signal.signal(s, shutdown)
 
-client.run(DISCORDBOT_TOKEN)
+client.run(DISCORDBOT_TOKEN, log_level=LOG_LEVEL)

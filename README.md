@@ -13,4 +13,6 @@ DISCORDBOT_OWNER_ID : [User id] (https://support.discord.com/hc/en-us/articles/2
 
 DISCORDBOT_JOIN_WEBHOOK : Optional, url to POST if someone joins to you
 
+LOG_LEVEL : Log level (critical|error|warning|info|debug)
+
 [Github] (https://github.com/DDanii/discordbot-self-radio) [Dockerhub] (https://hub.docker.com/r/ddanii/discordbot-self-radio)
