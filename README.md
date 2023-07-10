@@ -8,11 +8,11 @@ DISCORDBOT_STREAM_LINK : Radio stream link example: https://25293.live.streamthe
 
 DISCORDBOT_TOKEN : [Discord's developer portal](https://discordapp.com/developers/applications)
 
-DISCORDBOT_OWNER_ID : [User id] (https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) to join to 
+DISCORDBOT_OWNER_ID : [User id](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) to join to 
 
 
 DISCORDBOT_JOIN_WEBHOOK : Optional, url to POST if someone joins to you
 
-LOG_LEVEL : Log level (critical|error|warning|info|debug)
+LOG_LEVEL : Log level (critical | error | warning | info | debug)
 
-[Github] (https://github.com/DDanii/discordbot-self-radio) [Dockerhub] (https://hub.docker.com/r/ddanii/discordbot-self-radio)
+[Github](https://github.com/DDanii/discordbot-self-radio)        [Dockerhub](https://hub.docker.com/r/ddanii/discordbot-self-radio)
