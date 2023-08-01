@@ -1,4 +1,4 @@
-FROM crazymax/alpine-s6
+FROM lsiobase/alpine
 
 WORKDIR /usr/src/app
 
