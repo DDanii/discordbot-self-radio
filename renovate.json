@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "baseBranches": ["dev"],
+  "extends": ["config:recommended"],
+  "enabledManagers": ["pip_requirements"],
+  "packageRules": [
+    {
+      "matchManagers": ["pip_requirements"],
+      "matchFileNames": ["requirements.txt"],
+      "groupName": "Python dependencies"
+    }
+  ]
+}
